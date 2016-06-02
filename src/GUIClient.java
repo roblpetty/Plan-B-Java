@@ -7,7 +7,7 @@ public class GUIClient {
 		Option option;
 		payoffs payofftype;
 		Engine engine;
-		mcarlo mc;
+		MonteCarlo mc;
 		
 		MarketData data = new MarketData(rate, spot, volatility, dividend);
 		
@@ -43,7 +43,7 @@ public class GUIClient {
 			engine = new BinomialPricingEngine(steps, paths, pricers);
 			break;
 		case 1:
-			mc = new mcarlo();
+			mc = new MonteCarlo();
 			pricers = new LongstaffSchwartz(mc);
 			engine = new MonteCarloEngine(steps, paths, pricers);
 			break;
@@ -52,8 +52,8 @@ public class GUIClient {
 			engine = new BinomialPricingEngine(steps, paths, pricers);
 			break;
 		case 3:
-			mc = new mcarlo();
-			pricers = new NaiveMonteCarlo(mc);
+			mc = new MonteCarlo();
+			pricers = new NaiveMonteCarloPricer();
 			engine = new MonteCarloEngine(steps, paths, pricers);
 			break;
 		case 4:

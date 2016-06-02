@@ -1,5 +1,5 @@
 
-public class ClientNaiveMC {
+public class ClientAntitheticEuro {
 	public static void main(String[] args) {
 		long a = System.currentTimeMillis();
 		
@@ -16,7 +16,7 @@ public class ClientNaiveMC {
 	
 		payoffs payoff = new Put();
 		Option option = new VanillaOption(strike, expiry, payoff);
-		Pricers pricer = new NaiveMonteCarloPricer();
+		Pricers pricer = new AntitheticEuro();
 		Engine engine = new MonteCarloEngine(steps, paths, pricer);
 		Facade option1 = new Facade(option,engine,data);
 		

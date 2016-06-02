@@ -21,6 +21,6 @@ class Weird implements payoffs{
 	double strike;
 	
 	public double payoff(double strike, double spot) {
-		return Math.max(strike - spot*spot, 0);
+		return spot*spot;
 	}
 }

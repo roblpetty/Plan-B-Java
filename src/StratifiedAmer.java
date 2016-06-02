@@ -2,11 +2,11 @@ import java.util.ArrayList;
 import org.apache.commons.math3.stat.regression.*;
 
 
-public class LongstaffSchwartz implements Pricers{
+public class StratifiedAmer implements Pricers{
 	
 	MonteCarlo mc;
 	
-	public LongstaffSchwartz(MonteCarlo mc){
+	public StratifiedAmer(MonteCarlo mc){
 		this.mc = mc;
 	}
 	
@@ -17,7 +17,7 @@ public class LongstaffSchwartz implements Pricers{
 		double strike = option.strike;
 		
 		double dt = expiry / steps;
-		double[][] pricearray = mc.monteCarloArray(steps, paths, data, dt);
+		double[][] pricearray = mc.stratifiedMonteCarloArray(steps, paths, option, data, dt);
 		
 		double[][] cashflowarray = new double[paths][steps+1];
 		for(int row = 0; row<paths; row++){
@@ -90,7 +90,7 @@ public class LongstaffSchwartz implements Pricers{
 						exercisearray[row][col] = 0; 
 					}
 				}
-			}
+			}		
 		}
 		
 		double[] discountvect = new double[steps+1];

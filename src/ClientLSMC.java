@@ -10,10 +10,10 @@ public class ClientLSMC {
 		double strike = 40.0;
 		double expiry = 1.0;		
 		int steps = 365;
-		int paths = 1000;
+		int paths = 2000;
 
 		MarketData data = new MarketData( rate, spot, volatility, dividend);
-		mcarlo mc = new mcarlo();
+		MonteCarlo mc = new MonteCarlo();
 		
 		payoffs payoff = new Put();
 		Option option = new VanillaOption(strike, expiry, payoff);
@@ -21,9 +21,8 @@ public class ClientLSMC {
 		Engine engine = new MonteCarloEngine(steps, paths, pricer);
 		Facade option1 = new Facade(option,engine,data);
 		
-		
 		double price = option1.price();
-		System.out.print(price);
+		System.out.println(price);
 		
 		long b = System.currentTimeMillis();
 		long c = b-a;
