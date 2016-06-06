@@ -9,7 +9,7 @@ public class ClientAmerBinom {
 		double dividend = 0.00;		
 		double strike = 40.0;
 		double expiry = 1.0;		
-		int steps = 1000;
+		int steps = 10000;
 		int paths = 200;
 
 		MarketData data = new MarketData( rate, spot, volatility, dividend);

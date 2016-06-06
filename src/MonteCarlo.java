@@ -5,15 +5,15 @@ import org.apache.commons.math3.distribution.UniformRealDistribution;
 
 public class MonteCarlo {
 	
-	public double[][] monteCarloArray(int steps, int paths, MarketData data, double dt){
+	public double[][] monteCarloArray(int steps, int paths, MarketData data, double expiry){
 		double spot = data.getSpot();
 		double rate = data.getRate();
 		double volatility = data.getVolatility();
 		double dividend = data.getDividend();
 		NormalDistribution randNorm = new NormalDistribution();
 		//randNorm.reseedRandomGenerator(4678L);
-		double drift = (rate - dividend - 0.5 * volatility * volatility) * dt;
-		double diffusion = volatility * Math.sqrt(dt);				
+		double drift = (rate - dividend - 0.5 * volatility * volatility) * expiry;
+		double diffusion = volatility * Math.sqrt(expiry);				
 		double[][] patharray = new double[paths][steps+1];		
 		
 		for (int i=0; i<paths; i++) {
@@ -26,21 +26,20 @@ public class MonteCarlo {
 		return patharray;	
 	}
 	
-	public double[][] stratifiedMonteCarloArray(int steps, int paths, Option option, MarketData data, double dt){
+	public double[][] stratifiedMonteCarloArray(int steps, int paths, Option option, MarketData data){
 		double spot = data.getSpot();
 		double rate = data.getRate();
 		double volatility = data.getVolatility();
 		double dividend = data.getDividend();
 		double expiry = option.getexpiry();
 		
-		double nudt = expiry/steps;
-		double voldt = volatility * Math.sqrt(dt);
+		double nudt = (rate - dividend - .5*volatility*volatility)*expiry;
+		double voldt = volatility * Math.sqrt(expiry);
 		double sample;
 		double stratSample;
 		double epsilon;
 		double[] spot_T = new double[paths];
 		double[] path = new double[steps+2];
-		double[] pathshort = new double[steps+1];
 		double[][] patharray = new double[paths][steps+1];
 		UniformRealDistribution rand = new UniformRealDistribution();
 		NormalDistribution norm = new NormalDistribution();
@@ -73,7 +72,7 @@ public class MonteCarlo {
 				for(int j=1; j<= Math.pow(2, k-1); j++) {
 					double a = .5 * (path[left] + path[right]);
 					double b = .5 * Math.sqrt(TJump);
-					path[i] = a + b * rand.sample()*volatility;//should volatility be there?
+					path[i] = a + b * rand.sample();//should volatility be there?
 					patharray[row][i-1] = path[i];
 					right += IJump;
 					left += IJump;

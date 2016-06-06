@@ -1,4 +1,3 @@
-
 public class ClientLSMC {
 	public static void main(String[] args) {
 		long a = System.currentTimeMillis();
@@ -9,8 +8,8 @@ public class ClientLSMC {
 		double dividend = 0.00;		
 		double strike = 40.0;
 		double expiry = 1.0;		
-		int steps = 365;
-		int paths = 2000;
+		int steps = 512;
+		int paths = 20000;
 
 		MarketData data = new MarketData( rate, spot, volatility, dividend);
 		MonteCarlo mc = new MonteCarlo();

@@ -25,7 +25,7 @@ public class testbridge {
 			for(int j=1; j<= Math.pow(2, k-1); j++) {
 				double a = .5 * (path[left] + path[right]);
 				double b = .5 * Math.sqrt(TJump);
-				path[i] = a + b * rand.sample() * volatility;//should volatility be there?
+				path[i] = a + b * rand.sample();//should volatility be there?
 				right += IJump;
 				left += IJump;
 				i += IJump;

@@ -17,7 +17,7 @@ public class StratifiedAmer implements Pricers{
 		double strike = option.strike;
 		
 		double dt = expiry / steps;
-		double[][] pricearray = mc.stratifiedMonteCarloArray(steps, paths, option, data, dt);
+		double[][] pricearray = mc.stratifiedMonteCarloArray(steps, paths, option, data);
 		
 		double[][] cashflowarray = new double[paths][steps+1];
 		for(int row = 0; row<paths; row++){
