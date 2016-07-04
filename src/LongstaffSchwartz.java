@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import org.apache.commons.math3.stat.regression.*;
-
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
 public class LongstaffSchwartz implements Pricers{
 	
@@ -17,7 +17,8 @@ public class LongstaffSchwartz implements Pricers{
 		double strike = option.strike;
 		
 		double dt = expiry / steps;
-		double[][] pricearray = mc.monteCarloArray(steps, paths, data, dt);
+		double[][] pricearray = mc.fullPathArray();
+		//paths=pricearray.length;
 		
 		double[][] cashflowarray = new double[paths][steps+1];
 		for(int row = 0; row<paths; row++){
@@ -25,14 +26,14 @@ public class LongstaffSchwartz implements Pricers{
 				cashflowarray[row][col] = option.payoff(strike, pricearray[row][col]);
 			}
 		}
-		
+
 		double[][] exercisearray = new double[paths][steps + 1];
 		for(int row = 0; row<paths; row++){
 			if (cashflowarray[row][steps] > 0) {
 				exercisearray[row][steps] = 1;
 			} else {exercisearray[row][steps] = 0;}
 		}
-	
+
 //----------Done Setting up arrays-----------------------------------------------------------		
 		OLSMultipleLinearRegression regress = new OLSMultipleLinearRegression();
 	
@@ -99,13 +100,23 @@ public class LongstaffSchwartz implements Pricers{
 		}
 
 		double price = 0;
+		double[] cf = new double[paths];
 		for(int row=0; row<paths;row++){
+			cf[row]=0;
 			for(int col=0; col<=steps; col++) {
-				price += cashflowarray[row][col] * exercisearray[row][col] * discountvect[col]; 	
+				double cflow =cashflowarray[row][col] * exercisearray[row][col] * discountvect[col]; 
+				price += cflow;
+						
+				if (cashflowarray[row][col] * exercisearray[row][col] * discountvect[col]>0){
+					cf[row] = cflow;
+				}		
+				
 			}
 		}
 		price /= paths;
-	
+		StandardDeviation stdev = new StandardDeviation();
+		double stderr = stdev.evaluate(cf)/Math.sqrt(paths);
+		System.out.println("The standard error is: "+stderr);
 		return price;
 	}
 

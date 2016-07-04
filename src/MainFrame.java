@@ -1,17 +1,20 @@
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import java.awt.event.*;
 
 public class MainFrame extends JFrame implements ItemListener{
-	JRadioButton americanVanilla,europeanVanilla, asian;
+	JRadioButton american,european, asian, vanilla ;
 	JRadioButton call,put,weird;
 	JRadioButton binomial, monteCarlo;
 	JCheckBox stratified,antithetic, controlVariate;
 	JCheckBox webSpot, webInterestRate, webVolatility, webDividend;
-	JTextField strike, expiry, steps, paths;
+	JTextField strike, expiry, steps, paths, threads;
 	JTextField spot, interestRate, volatility, dividend;
-	JLabel strikelab, expirylab, stepslab, pathslab;
+	JLabel strikelab, expirylab, stepslab, pathslab, stepslab2, threadslab, threadslab2;
 	JLabel spotlab, interestRatelab, volatilitylab, dividendlab;
 	JButton calc;
 	JLabel price;
@@ -19,7 +22,7 @@ public class MainFrame extends JFrame implements ItemListener{
 	
 	MainFrame() {
 		
-		this.setSize(500, 500);
+		this.setSize(510, 450);
 		this.setLocationRelativeTo(null);
 		this.setTitle("Options Pricer");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,29 +32,47 @@ public class MainFrame extends JFrame implements ItemListener{
 		JPanel mainPanel = new JPanel();
 		
 		//Option Type Buttons
-		americanVanilla = new JRadioButton("American Vanilla");
-		europeanVanilla = new JRadioButton("European Vanilla");
+		vanilla = new JRadioButton("Vanilla");
 		asian = new JRadioButton("Asian");
-		asian.setEnabled(false);
 		
 		ButtonGroup optionTypeGroup = new ButtonGroup();
-		optionTypeGroup.add(americanVanilla);
-		optionTypeGroup.add(europeanVanilla);
+		optionTypeGroup.add(vanilla);
 		optionTypeGroup.add(asian);
 		
 		JPanel optionTypePanel = new JPanel();
 		Border optionTypeBorder = BorderFactory.createTitledBorder("Option Type");
 		optionTypePanel.setBorder(optionTypeBorder);
-		americanVanilla.setSelected(true);
+		vanilla.setSelected(true);
 		mainPanel.add(optionTypePanel);
 		
-		optionTypePanel.add(americanVanilla);
-		optionTypePanel.add(europeanVanilla);
+		optionTypePanel.add(vanilla);
 		optionTypePanel.add(asian);
 		
-		americanVanilla.addItemListener(this);
-		europeanVanilla.addItemListener(this);
+		vanilla.addItemListener(this);
 		asian.addItemListener(this);
+		
+		this.add(mainPanel);
+		
+		
+		//Exercise Type Buttons
+		american = new JRadioButton("American");
+		european= new JRadioButton("European");
+		
+		ButtonGroup exerciseTypeGroup = new ButtonGroup();
+		exerciseTypeGroup.add(american);
+		exerciseTypeGroup.add(european);
+		
+		JPanel exerciseTypePanel = new JPanel();
+		Border exerciseTypeBorder = BorderFactory.createTitledBorder("Exercise Type");
+		exerciseTypePanel.setBorder(exerciseTypeBorder);
+		american.setSelected(true);
+		mainPanel.add(exerciseTypePanel);
+		
+		exerciseTypePanel.add(american);
+		exerciseTypePanel.add(european);
+		
+		american.addItemListener(this);
+		european.addItemListener(this);
 		
 		this.add(mainPanel);
 		this.setVisible(true);
@@ -109,7 +130,7 @@ public class MainFrame extends JFrame implements ItemListener{
 		antithetic = new JCheckBox ("Antithetic");
 		stratified = new JCheckBox ("Stratified");
 		controlVariate = new JCheckBox ("Control Variate");
-		
+		controlVariate.setVisible(false);
 		
 		mCarloTypePanel.add(antithetic);
 		mCarloTypePanel.add(stratified);
@@ -128,13 +149,84 @@ public class MainFrame extends JFrame implements ItemListener{
 		mainPanel.add(optionInfoPanel);
 		
 		strike = new JTextField(5);
+		strike.setText("40");
 		expiry = new JTextField(5);
+		expiry.setText("1");
 		steps = new JTextField(5);
+		steps.setText("8");
 		paths = new JTextField(5);
+		paths.setText("1000");
+		threads = new JTextField(5);
+		threads.setText("0");
 		strikelab = new JLabel("Strike");
 		expirylab = new JLabel("Expiry");
-		stepslab = new JLabel("Steps");
+		stepslab = new JLabel("Steps: 2^");
 		pathslab = new JLabel("Paths");
+		stepslab2 = new JLabel();
+		threadslab = new JLabel("Threads: 2^");
+		threadslab2 = new JLabel("=1");
+		stepslab2.setText("="+(int)Math.pow(2,Integer.parseInt(steps.getText())));
+		
+		steps.getDocument().addDocumentListener(new DocumentListener(){
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				
+				try{
+					stepslab2.setText("="+(int)Math.pow(2,Integer.parseInt(steps.getText())));	
+				}catch(NumberFormatException excep){
+					stepslab2.setText("=0");	
+				}
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				try{
+					stepslab2.setText("="+(int)Math.pow(2,Integer.parseInt(steps.getText())));	
+				}catch(NumberFormatException excep){
+					stepslab2.setText("=0");	
+				}			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				try{
+					stepslab2.setText("="+(int)Math.pow(2,Integer.parseInt(steps.getText())));	
+				}catch(NumberFormatException excep){
+					stepslab2.setText("=0");	
+				}				
+			}
+		});
+		
+		threads.getDocument().addDocumentListener(new DocumentListener(){
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				
+				try{
+					threadslab2.setText("="+(int)Math.pow(2,Integer.parseInt(threads.getText())));	
+				}catch(NumberFormatException excep){
+					threadslab2.setText("^2=0");	
+				}
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				try{
+					threadslab2.setText("="+(int)Math.pow(2,Integer.parseInt(threads.getText())));	
+				}catch(NumberFormatException excep){
+					threadslab2.setText("=0");	
+				}			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				try{
+					threadslab2.setText("="+(int)Math.pow(2,Integer.parseInt(threads.getText())));	
+				}catch(NumberFormatException excep){
+					threadslab2.setText("=0");	
+				}				}
+			
+		});
+		JPanel optionInfoSubPanel = new JPanel();
 		
 		optionInfoPanel.add(strikelab);
 		optionInfoPanel.add(strike);
@@ -142,17 +234,23 @@ public class MainFrame extends JFrame implements ItemListener{
 		optionInfoPanel.add(expiry);
 		optionInfoPanel.add(stepslab);
 		optionInfoPanel.add(steps);
-		optionInfoPanel.add(pathslab);
-		optionInfoPanel.add(paths);
+		optionInfoPanel.add(stepslab2);
+		optionInfoSubPanel.add(pathslab);
+		optionInfoSubPanel.add(paths);	
+		optionInfoSubPanel.add(threadslab);
+		optionInfoSubPanel.add(threads);
+		optionInfoSubPanel.add(threadslab2);		
+		mainPanel.add(optionInfoSubPanel);
 		
 		paths.setEnabled(false);
-		paths.setText("1");
+		threads.setEnabled(false);
+
 		
 		//Market data web pull check boxes
 		JPanel dataScrapePanel = new JPanel();
 		Border dataScrapeBorder = BorderFactory.createTitledBorder("Web Data Scrape");
 		dataScrapePanel.setBorder(dataScrapeBorder);
-		mainPanel.add(dataScrapePanel);
+		//mainPanel.add(dataScrapePanel);
 		
 		webInterestRate = new JCheckBox("Interest Rate");
 		webSpot = new JCheckBox ("Spot Price");
@@ -177,9 +275,13 @@ public class MainFrame extends JFrame implements ItemListener{
 		mainPanel.add(dataPanel);
 		
 		spot = new JTextField(5);
+		spot.setText("41");
 		interestRate = new JTextField(5);
+		interestRate.setText(".08");
 		volatility = new JTextField(5);
+		volatility.setText(".3");
 		dividend = new JTextField(5);
+		dividend.setText("0");
 		spotlab = new JLabel("Spot");
 		interestRatelab = new JLabel("Interest Rate");
 		volatilitylab = new JLabel("Volatility");
@@ -220,71 +322,84 @@ public class MainFrame extends JFrame implements ItemListener{
 	// item listener actions
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-			
-		if(e.getSource().equals(americanVanilla) && americanVanilla.isSelected()){
+		if(e.getSource().equals(vanilla) && vanilla.isSelected()){
 			binomial.setEnabled(true);
+			controlVariate.setEnabled(true);
+		} else if(e.getSource().equals(asian) && asian.isSelected()){
+			binomial.setEnabled(false);
+			controlVariate.setEnabled(false);
+			controlVariate.setSelected(false);
+			monteCarlo.setSelected(true);
+		} else if(e.getSource().equals(american) && american.isSelected()){
+			if(!asian.isSelected()){
+				binomial.setEnabled(true);	
+			}
 			monteCarlo.setEnabled(true);
+			controlVariate.setEnabled(false);
+			controlVariate.setSelected(false);
 			if (monteCarlo.isSelected()){
 				paths.setEnabled(true);
-			
+				threads.setEnabled(true);
 				antithetic.setEnabled(true);
 				stratified.setEnabled(true);
-				controlVariate.setEnabled(true);
+		
 			}else{
 				paths.setText("1");
 				paths.setEnabled(false);
-			
+				threads.setText("0");
+				threads.setEnabled(false);
 				antithetic.setEnabled(false);
 				stratified.setEnabled(false);
 				controlVariate.setEnabled(false);
+				controlVariate.setSelected(false);
 			}
-		} else if (e.getSource().equals(europeanVanilla) && europeanVanilla.isSelected()){
-			binomial.setEnabled(true);
+		} else if (e.getSource().equals(european) && european.isSelected()){
+			if(!asian.isSelected()){
+				binomial.setEnabled(true);
+			}
 			monteCarlo.setEnabled(true);
-
 			antithetic.setEnabled(false);
 			stratified.setEnabled(false);
 			controlVariate.setEnabled(false);
+			controlVariate.setSelected(false);
 			if (monteCarlo.isSelected()){
 				paths.setEnabled(true);
-
+				threads.setEnabled(true);
 				antithetic.setEnabled(true);
 				stratified.setEnabled(true);
-				controlVariate.setEnabled(true);
+				if(vanilla.isSelected()){controlVariate.setEnabled(true);}
 			}else{
 				paths.setText("1");
 				paths.setEnabled(false);
-		
+				threads.setText("0");
+				threads.setEnabled(false);
 				antithetic.setEnabled(false);
 				stratified.setEnabled(false);
 				controlVariate.setEnabled(false);
+				controlVariate.setSelected(false);
 			}
-		} else if (e.getSource().equals(asian) && asian.isSelected()){
-			binomial.setEnabled(false);
-			monteCarlo.setSelected(true);
-			monteCarlo.setEnabled(true);
-	
-			antithetic.setEnabled(true);
-			stratified.setEnabled(true);
-			controlVariate.setEnabled(true);
-			paths.setEnabled(true);
+		
 		} else if (e.getSource().equals(binomial) && binomial.isSelected()){
 		
 			antithetic.setEnabled(false);
 			stratified.setEnabled(false);
 			controlVariate.setEnabled(false);
-
+			controlVariate.setSelected(false);
 			antithetic.setSelected(false);
 			stratified.setSelected(false);
-			controlVariate.setSelected(false);
 			paths.setEnabled(false);
 			paths.setText("1");
+			threads.setEnabled(false);
+			threads.setText("0");
 		} else if (e.getSource().equals(monteCarlo) && monteCarlo.isSelected()){
-
 			antithetic.setEnabled(true);
 			stratified.setEnabled(true);
-			controlVariate.setEnabled(true);
 			paths.setEnabled(true);
+			threads.setEnabled(true);
+			if(american.isSelected()||asian.isSelected()){
+				controlVariate.setEnabled(false);
+				controlVariate.setSelected(false);
+			}else{controlVariate.setEnabled(true);}
 		} else if (e.getSource().equals(webSpot)){
 			if(webSpot.isSelected()){
 				spot.setEnabled(false);
@@ -323,6 +438,7 @@ public class MainFrame extends JFrame implements ItemListener{
 		double dividendVal;
 		double priceVal;
 		int pathsVal;
+		int threadsVal;
 
 		
 		
@@ -337,12 +453,13 @@ public class MainFrame extends JFrame implements ItemListener{
 				try{
 					strikeVal = Double.parseDouble(strike.getText());
 					expiryVal = Double.parseDouble(expiry.getText());
-					stepsVal = Integer.parseInt(steps.getText());
+					stepsVal = (int) Math.pow(2,Integer.parseInt(steps.getText()));
 					spotVal = Double.parseDouble(spot.getText());
 					interestRateVal = Double.parseDouble(interestRate.getText());
 					volatilityVal = Double.parseDouble(volatility.getText());
 					dividendVal = Double.parseDouble(dividend.getText());
 					pathsVal = Integer.parseInt(paths.getText());
+					threadsVal = (int) Math.pow(2,Integer.parseInt(threads.getText()));
 					// TODO : Make these actual exceptions			
 					if(strikeVal < 0){
 						JOptionPane.showMessageDialog(MainFrame.this, "Strike must be a number greater than or equal to 0.", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -363,14 +480,16 @@ public class MainFrame extends JFrame implements ItemListener{
 						JOptionPane.showMessageDialog(MainFrame.this, "Dividend Yield must be greater than or equal to 0.", "ERROR", JOptionPane.ERROR_MESSAGE);
 					}
 					if(pathsVal <= 0){
-						JOptionPane.showMessageDialog(MainFrame.this, "Dividend Yield must be greater 0.", "ERROR", JOptionPane.ERROR_MESSAGE);
-					}					
+						JOptionPane.showMessageDialog(MainFrame.this, "paths must be greater than 0.", "ERROR", JOptionPane.ERROR_MESSAGE);
+					}
+					if(threadsVal <= 0){
+						JOptionPane.showMessageDialog(MainFrame.this, "Threads must be greater at least 1.", "ERROR", JOptionPane.ERROR_MESSAGE);
+					}
 					// ----------------
 					
-					int opType  = 8;
-					if (americanVanilla.isSelected()) {opType = 0;}
-					if (europeanVanilla.isSelected()) {opType = 1;}
-					if (asian.isSelected()) {opType = 2;}
+					int exerciseType  = 8;
+					if (american.isSelected()) {exerciseType = 0;}
+					if (european.isSelected()) {exerciseType = 1;}
 					
 					int payoffType = 8;
 					if (call.isSelected()) {payoffType = 0;}
@@ -378,26 +497,42 @@ public class MainFrame extends JFrame implements ItemListener{
 					if (weird.isSelected()) {payoffType = 2;}
 					
 					int pricertype = 8;
-					if (americanVanilla.isSelected() && binomial.isSelected()) {pricertype = 0;}
-					if (americanVanilla.isSelected() && monteCarlo.isSelected()) {pricertype = 1;}
-					if (europeanVanilla.isSelected() && binomial.isSelected()) {pricertype = 2;}
-					if (europeanVanilla.isSelected() && monteCarlo.isSelected()) {pricertype = 3;}
-					if (asian.isSelected()) {pricertype = 4;}
+					if (american.isSelected() && binomial.isSelected()) {pricertype = 0;}
+					if (european.isSelected() && binomial.isSelected()) {pricertype = 1;}
+					if (american.isSelected() && monteCarlo.isSelected()) {pricertype = 2;}
+					if (european.isSelected() && monteCarlo.isSelected()) {pricertype = 3;}
+					if (american.isSelected() && asian.isSelected()) {pricertype = 4;}
+					if (european.isSelected() && asian.isSelected()) {pricertype = 5;}
 					
+					int MCType = 0;
+					if (antithetic.isSelected() && !stratified.isSelected() && !controlVariate.isSelected()){MCType = 1;}
+					if (!antithetic.isSelected() && stratified.isSelected() && !controlVariate.isSelected()){MCType = 2;}
+					if (!antithetic.isSelected() && !stratified.isSelected() && controlVariate.isSelected()){MCType = 3;}
+					if (antithetic.isSelected() && stratified.isSelected() && !controlVariate.isSelected()){MCType = 4;}
+					if (antithetic.isSelected() && !stratified.isSelected() && controlVariate.isSelected()){MCType = 5;}
+					if (!antithetic.isSelected() && stratified.isSelected() && controlVariate.isSelected()){MCType = 6;}
+					if (antithetic.isSelected() && !stratified.isSelected() && !controlVariate.isSelected()){MCType = 7;}
+					if (asian.isSelected() && !antithetic.isSelected() && !stratified.isSelected()){MCType = 8;}
+					if (asian.isSelected() && antithetic.isSelected() && !stratified.isSelected()){MCType = 9;}
+					if (asian.isSelected() && !antithetic.isSelected() && stratified.isSelected()){MCType = 10;}
+					if (asian.isSelected() && antithetic.isSelected() && stratified.isSelected()){MCType = 11;}
 					
+					System.out.println("exercise type: "+exerciseType);
+					System.out.println("payoff type: "+payoffType);
+					System.out.println("pricer type: "+pricertype);
+					System.out.println("MCType: "+MCType);
 					
-					priceVal = GUIClient.client(stepsVal, pathsVal, spotVal, interestRateVal, volatilityVal, dividendVal, strikeVal, expiryVal,opType,payoffType,pricertype,antithetic.isSelected(),stratified.isSelected(),controlVariate.isSelected());
+					priceVal = GUIClient.client(stepsVal, pathsVal, spotVal, interestRateVal, volatilityVal, dividendVal, strikeVal, expiryVal, threadsVal, exerciseType,payoffType,pricertype, MCType);
 					
 					price.setText(Double.toString(priceVal));
+
 				}
 				catch(NumberFormatException excep){
 					JOptionPane.showMessageDialog(MainFrame.this, "Please Enter the Correct Info\n\nCannot leave activefields blank.\nOnly number can be entered.\nSteps and Paths fields must be integers. ", "ERROR", JOptionPane.ERROR_MESSAGE);
 					
 				}
-			}
-			
+			}	
 		}
-		
 	}
 	
 	

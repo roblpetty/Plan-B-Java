@@ -1,4 +1,3 @@
-
 public class ClientAmerBinom {
 	public static void main(String[] args) {
 		long a = System.currentTimeMillis();
@@ -13,19 +12,19 @@ public class ClientAmerBinom {
 		int paths = 200;
 
 		MarketData data = new MarketData( rate, spot, volatility, dividend);
-	
-		payoffs payoff = new Put();
+		
+		Payoffs payoff = new Put();
 		Option option = new VanillaOption(strike, expiry, payoff);
 		Pricers pricer = new AmerBinomPricer();
 		Engine engine = new BinomialPricingEngine(steps, paths, pricer);
 		Facade option1 = new Facade(option,engine,data);
 		
 		double price = option1.price();
-		System.out.print(price);
+		System.out.println("The option price is: "+price);
 		
 		long b = System.currentTimeMillis();
 		long c = b-a;
-		System.out.println();
-		System.out.println(c);		
+		
+		System.out.println("This took "+c+" milliseconds to run");		
 	}
 }

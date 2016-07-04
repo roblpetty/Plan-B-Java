@@ -2,9 +2,9 @@
 abstract class Option {
 	double expiry;	
 	double strike;
-	payoffs payoffType;
+	Payoffs payoffType;
 	
-	public Option(double strike, double expiry, payoffs payoffType) {
+	public Option(double strike, double expiry, Payoffs payoffType) {
 		setExpiry(expiry);
 		setStrike(strike);
 		this.payoffType = payoffType;

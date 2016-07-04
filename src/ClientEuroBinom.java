@@ -14,9 +14,9 @@ public class ClientEuroBinom {
 
 		MarketData data = new MarketData( rate, spot, volatility, dividend);
 	
-		payoffs payoff = new Put();
+		Payoffs payoff = new Put();
 		Option option = new VanillaOption(strike, expiry, payoff);
-		Pricers pricer = new EuroBinomPricer();
+		Pricers pricer = new EuropeanBinomialPricer();
 		Engine engine = new BinomialPricingEngine(steps, paths, pricer);
 		Facade option1 = new Facade(option,engine,data);
 		
