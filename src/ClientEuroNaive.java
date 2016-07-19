@@ -10,7 +10,9 @@ public class ClientEuroNaive {
 		double expiry = 1.0;		
 		int steps = 256;
 		int paths = 20000
-	alkdfja;le
+
+	alkdfja;lr
+
 ;
 	
 		MarketData data = new MarketData( rate, spot, volatility, dividend);
