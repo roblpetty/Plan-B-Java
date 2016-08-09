@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutorService;
 public class GUIClient {
 	
 	public static double client (int steps, int paths, double spot, double rate, double volatility, double  dividend, double strike, double expiry, int threads, int exerciseType,int payoff, int pricer, int MCType) {
+		
 		Pricers pricers;
 		Option option;
 		Payoffs payofftype;
@@ -22,7 +23,7 @@ public class GUIClient {
 		System.out.println("volatility: "+ volatility);
 		System.out.println("divided: "+ dividend);
 */
-
+		long start = System.currentTimeMillis();
 		
 		steps = steps/threads;
 		
@@ -121,15 +122,6 @@ public class GUIClient {
 			break;
 		}
 		
-		System.out.println(spot);
-		System.out.println(rate);
-		System.out.println(volatility);
-		System.out.println(dividend);
-		System.out.println(strike);
-		System.out.println(steps);
-		System.out.println(paths);
-		
-		
 		
 		
 		System.out.println(mc);
@@ -145,7 +137,8 @@ public class GUIClient {
 		
 		Facade option1 = new Facade(option,engine,data);
 		double price = option1.price();
-
+		System.out.println((System.currentTimeMillis()-start)+" milliseconds");
+		
 		return price;
 	}
 

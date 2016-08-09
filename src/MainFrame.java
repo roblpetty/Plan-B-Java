@@ -21,7 +21,6 @@ public class MainFrame extends JFrame implements ItemListener{
 
 	
 	MainFrame() {
-		
 		this.setSize(510, 450);
 		this.setLocationRelativeTo(null);
 		this.setTitle("Options Pricer");
@@ -169,7 +168,6 @@ public class MainFrame extends JFrame implements ItemListener{
 		
 		steps.getDocument().addDocumentListener(new DocumentListener(){
 
-			@Override
 			public void changedUpdate(DocumentEvent e) {
 				
 				try{
@@ -179,7 +177,6 @@ public class MainFrame extends JFrame implements ItemListener{
 				}
 			}
 
-			@Override
 			public void insertUpdate(DocumentEvent e) {
 				try{
 					stepslab2.setText("="+(int)Math.pow(2,Integer.parseInt(steps.getText())));	
@@ -187,7 +184,6 @@ public class MainFrame extends JFrame implements ItemListener{
 					stepslab2.setText("=0");	
 				}			}
 
-			@Override
 			public void removeUpdate(DocumentEvent e) {
 				try{
 					stepslab2.setText("="+(int)Math.pow(2,Integer.parseInt(steps.getText())));	
@@ -199,7 +195,6 @@ public class MainFrame extends JFrame implements ItemListener{
 		
 		threads.getDocument().addDocumentListener(new DocumentListener(){
 
-			@Override
 			public void changedUpdate(DocumentEvent e) {
 				
 				try{
@@ -209,7 +204,6 @@ public class MainFrame extends JFrame implements ItemListener{
 				}
 			}
 
-			@Override
 			public void insertUpdate(DocumentEvent e) {
 				try{
 					threadslab2.setText("="+(int)Math.pow(2,Integer.parseInt(threads.getText())));	
@@ -217,7 +211,6 @@ public class MainFrame extends JFrame implements ItemListener{
 					threadslab2.setText("=0");	
 				}			}
 
-			@Override
 			public void removeUpdate(DocumentEvent e) {
 				try{
 					threadslab2.setText("="+(int)Math.pow(2,Integer.parseInt(threads.getText())));	
@@ -320,7 +313,6 @@ public class MainFrame extends JFrame implements ItemListener{
 	}		
 
 	// item listener actions
-	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if(e.getSource().equals(vanilla) && vanilla.isSelected()){
 			binomial.setEnabled(true);
@@ -442,7 +434,6 @@ public class MainFrame extends JFrame implements ItemListener{
 
 		
 		
-		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			if(e.getSource().equals(calc)) {
@@ -517,10 +508,7 @@ public class MainFrame extends JFrame implements ItemListener{
 					if (asian.isSelected() && !antithetic.isSelected() && stratified.isSelected()){MCType = 10;}
 					if (asian.isSelected() && antithetic.isSelected() && stratified.isSelected()){MCType = 11;}
 					
-					System.out.println("exercise type: "+exerciseType);
-					System.out.println("payoff type: "+payoffType);
-					System.out.println("pricer type: "+pricertype);
-					System.out.println("MCType: "+MCType);
+
 					
 					priceVal = GUIClient.client(stepsVal, pathsVal, spotVal, interestRateVal, volatilityVal, dividendVal, strikeVal, expiryVal, threadsVal, exerciseType,payoffType,pricertype, MCType);
 					

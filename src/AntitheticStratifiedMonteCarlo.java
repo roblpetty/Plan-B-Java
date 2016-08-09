@@ -60,7 +60,7 @@ public class AntitheticStratifiedMonteCarlo extends MonteCarlo{
 			}
 		
 		}
-		System.out.println(patharray);
+		//System.out.println(patharray);
 		return patharray;
 	}
 

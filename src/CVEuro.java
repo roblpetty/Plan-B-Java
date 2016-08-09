@@ -5,7 +5,6 @@ import org.apache.commons.math3.stat.descriptive.moment.Mean;
 public class CVEuro implements Pricers{
 	NormalDistribution rand = new NormalDistribution();
 	
-	@Override
 	public double price(int steps, int paths, Option option, MarketData data) {
 		double expiry = option.getexpiry();
 		double spot = data.getSpot();

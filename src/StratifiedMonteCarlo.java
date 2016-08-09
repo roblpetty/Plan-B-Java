@@ -21,6 +21,7 @@ public class StratifiedMonteCarlo extends MonteCarlo{
 		double[][] patharray = new double[paths][steps+1];
 		
 		double numBisections = Math.log(steps)/Math.log(2);
+		//System.out.println(steps);
 		if (Math.round(numBisections) != numBisections) {
 			System.out.println("Error: numSteps must be a power of 2");
 			return patharray;
@@ -59,7 +60,7 @@ public class StratifiedMonteCarlo extends MonteCarlo{
 			}
 		
 		}
-		System.out.println(patharray);
+		//System.out.println(patharray);
 		return patharray;
 	}
 

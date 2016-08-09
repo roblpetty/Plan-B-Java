@@ -25,7 +25,7 @@ public class threadedamerican {
 			dividend = 0.00;		
 			strike = 40.0;
 			expiry = 1.0;		
-			steps = 512;
+			steps = 256;
 				
 			MarketData data = new MarketData( rate, spot, volatility, dividend);
 			MonteCarlo mc = new NaiveMonteCarlo(steps, paths, data, expiry);
@@ -56,14 +56,15 @@ public class threadedamerican {
 	
 	public static void main(String[] args) {
 		test.prices = new ArrayList<Double>();
-		test.threads = 100;
+		test.threads = 50;
 		test.start = System.currentTimeMillis();
-		test.paths = 20000/test.threads;
+		test.paths = Math.round(100000/test.threads);
 		ExecutorService threadPool = Executors.newCachedThreadPool();
 		for (int i=0; i<test.threads; i++){
 			threadPool.execute(new test());
 			System.out.println("this: "+Thread.activeCount());
 		}
 		threadPool.shutdown();
+		
 	}
 }

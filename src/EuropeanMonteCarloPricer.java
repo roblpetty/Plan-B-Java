@@ -8,7 +8,6 @@ public class EuropeanMonteCarloPricer implements Pricers{
 		this.mc = mc;
 	}
 	
-	@Override
 	public double price(int steps, int paths, Option option, MarketData data) {
 		double expiry = option.getexpiry();
 		double rate = data.getRate();
